@@ -1,6 +1,6 @@
-# lurker
+# Lurker
 
-Automatically hotswaps changed Lua files into a running
+A small module which automatically hotswaps changed Lua files in a running
 [LÖVE](http://love2d.org) project.
 
 
@@ -13,7 +13,7 @@ function:
 ```lua
 require("lurker").update()
 ```
-lurker will automatically detect changed files and hotswap them into the
+Lurker will automatically detect changed files and hotswap them into the
 running project.
 
 
