@@ -174,26 +174,29 @@ function lurker.exiterrorstate()
 end
 
 
-function lurker.scan()
-  for _, f in pairs(lurker.getchanged()) do
-    lurker.print("Hotswapping '{1}'...", {f})
-    if lurker.state == "error" then 
-      lurker.exiterrorstate()
-    end
-    lurker.preswap(f)
-    local modname = lurker.modname(f)
-    local t, ok, err = lume.time(lume.hotswap, modname)
-    if ok then
-      lurker.print("Swapped '{1}' in {2} secs", {f, t})
-    else 
-      lurker.print("Failed to swap '{1}' : {2}", {f, err})
-    end
-    lurker.resetfile(f)
-    lurker.postswap(f)
-    if lurker.protected then
-      lurker.updatewrappers()
-    end
+function lurker.hotswapfile(f)
+  lurker.print("Hotswapping '{1}'...", {f})
+  if lurker.state == "error" then 
+    lurker.exiterrorstate()
   end
+  lurker.preswap(f)
+  local modname = lurker.modname(f)
+  local t, ok, err = lume.time(lume.hotswap, modname)
+  if ok then
+    lurker.print("Swapped '{1}' in {2} secs", {f, t})
+  else 
+    lurker.print("Failed to swap '{1}' : {2}", {f, err})
+  end
+  lurker.resetfile(f)
+  lurker.postswap(f)
+  if lurker.protected then
+    lurker.updatewrappers()
+  end
+end
+
+
+function lurker.scan()
+  lume.each(lurker.getchanged(), lurker.hotswapfile)
 end
 
 
