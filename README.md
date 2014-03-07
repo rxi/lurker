@@ -45,6 +45,14 @@ hotswap occurs and is passed the name of the file which was swapped.
 lurker.postswap = function(f) print("File " .. f .. " was swapped") end
 ```
 
+### lurker.protected
+Dictates whether lurker should run in protected mode; this is `true` by
+default. If protected mode is disabled then LÖVE's usual error screen is used
+when an error occurs in a LÖVE callback function; if it is enabled then
+lurker's error state (which continues watching for file changes and can resume
+execution) is used. Changes to this variable should be made before any calls to
+lurker.update() are made.
+
 ### lurker.interval
 The interval in seconds for how often the scan of the directory is performed.
 This is `.5` by default.
