@@ -176,7 +176,7 @@ end
 
 function lurker.scan()
   for _, f in pairs(lurker.getchanged()) do
-    lurker.print("Hotswapping '{f}'...", {f = f})
+    lurker.print("Hotswapping '{1}'...", {f})
     if lurker.state == "error" then 
       lurker.exiterrorstate()
     end
@@ -184,9 +184,9 @@ function lurker.scan()
     local modname = lurker.modname(f)
     local t, ok, err = lume.time(lume.hotswap, modname)
     if ok then
-      lurker.print("Swapped '{f}' in {t} secs", {f = f, t = t})
+      lurker.print("Swapped '{1}' in {2} secs", {f, t})
     else 
-      lurker.print("Failed to swap '{f}' : {e}", {f = f, e = err})
+      lurker.print("Failed to swap '{1}' : {2}", {f, err})
     end
     lurker.resetfile(f)
     lurker.postswap(f)
