@@ -64,7 +64,7 @@ end
 function lurker.initwrappers()
   for _, v in pairs(lovecallbacknames) do
     lurker.funcwrappers[v] = function(...)
-      args = {...}
+      local args = {...}
       xpcall(function()
         return lurker.lovefuncs[v] and lurker.lovefuncs[v](unpack(args))
       end, lurker.onerror)
