@@ -53,6 +53,12 @@ lurker's error state (which continues watching for file changes and can resume
 execution) is used. Changes to this variable should be made before any calls to
 lurker.update() are made.
 
+### lurker.quiet
+Dictates what should happen if lurker tries to load a file which contains a
+syntax error. If it is `false` then lurker's error screen is shown until the
+syntax error is fixed; if it is `true` the error message is printed to the
+console and the program continues. lurker.quiet is `false` by default.
+
 ### lurker.interval
 The interval in seconds for how often the scan of the directory is performed.
 This is `.5` by default.
