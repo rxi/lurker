@@ -111,9 +111,9 @@ function lurker.onerror(e, nostacktrace)
       if color2 then love.graphics.setColor(lume.rgba(color2)) end
       love.graphics.rectangle("fill", animpos, pos, 8, 1)
     end
-    local function drawtext(str, x, y, color)
+    local function drawtext(str, x, y, color, limit)
       love.graphics.setColor(lume.rgba(color))
-      love.graphics.print(str, x, y)
+      love.graphics[limit and "printf" or "print"](str, x, y, limit)
     end
     love.graphics.setBackgroundColor(lume.rgba(colors[1]))
     love.graphics.clear()
@@ -124,7 +124,7 @@ function lurker.onerror(e, nostacktrace)
     drawtext("If you fix the problem and update the file the program will " ..
              "resume", pad, pad + 46, colors[3])
     drawhr(pad + 72, colors[4], colors[5])
-    drawtext(msg, pad, pad + 90, colors[5])
+    drawtext(msg, pad, pad + 90, colors[5], width - pad * 2)
     love.graphics.reset()
   end
 end
