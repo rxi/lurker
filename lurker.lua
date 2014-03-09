@@ -29,7 +29,9 @@ function lurker.init()
   lurker.postswap = function() end
   lurker.interval = .5
   lurker.protected = true
+  lurker.quiet = false
   lurker.lastscan = 0
+  lurker.lasterrorfile = nil
   lurker.files = {}
   lurker.funcwrappers = {}
   lurker.lovefuncs = {}
@@ -85,7 +87,7 @@ function lurker.updatewrappers()
 end
 
 
-function lurker.onerror(e)
+function lurker.onerror(e, nostacktrace)
   lurker.print("An error occurred; switching to error state")
   lurker.state = "error"
   for _, v in pairs(lovecallbacknames) do
@@ -93,7 +95,7 @@ function lurker.onerror(e)
   end
   love.update = lurker.update
 
-  local stacktrace = debug.traceback():gsub("\t", "")
+  local stacktrace = nostacktrace and "" or debug.traceback():gsub("\t", "")
   local msg = lume.format("{1}\n\n{2}", {e, stacktrace})
   local colors = { 0xFF1E1E2C, 0xFFF0A3A3, 0xFF92B5B0, 0xFF66666A, 0xFFCDCDCD }
   love.graphics.reset()
@@ -151,7 +153,12 @@ function lurker.update()
   local diff = time() - lurker.lastscan
   if diff > lurker.interval then
     lurker.lastscan = lurker.lastscan + diff
-    lurker.scan()
+    local changed = lurker.scan()
+    if #changed > 0 and lurker.lasterrorfile then
+      local f = lurker.lasterrorfile
+      lurker.lasterrorfile = nil
+      lurker.hotswapfile(f)
+    end
   end
 end
 
@@ -186,6 +193,12 @@ function lurker.hotswapfile(f)
     lurker.print("Swapped '{1}' in {2} secs", {f, t})
   else 
     lurker.print("Failed to swap '{1}' : {2}", {f, err})
+    if not lurker.quiet and lurker.protected then
+      lurker.lasterrorfile = f
+      lurker.onerror(err, true)
+      lurker.resetfile(f)
+      return
+    end
   end
   lurker.resetfile(f)
   lurker.postswap(f)
@@ -199,7 +212,9 @@ function lurker.scan()
   if lurker.state == "init" then
     lurker.exitinitstate()
   end
-  lume.each(lurker.getchanged(), lurker.hotswapfile)
+  local changed = lurker.getchanged()
+  lume.each(changed, lurker.hotswapfile)
+  return changed
 end
 
 
