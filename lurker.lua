@@ -29,7 +29,7 @@ function lurker.init()
   lurker.postswap = function() end
   lurker.interval = .5
   lurker.protected = true
-  lurker.last = 0
+  lurker.lastscan = 0
   lurker.files = {}
   lurker.funcwrappers = {}
   lurker.lovefuncs = {}
@@ -148,9 +148,9 @@ function lurker.update()
   if lurker.state == "init" then
     lurker.exitinitstate()
   end
-  local diff = time() - lurker.last 
+  local diff = time() - lurker.lastscan
   if diff > lurker.interval then
-    lurker.last = lurker.last + diff
+    lurker.lastscan = lurker.lastscan + diff
     lurker.scan()
   end
 end
