@@ -128,17 +128,25 @@ function lurker.onerror(e)
 end
 
 
-function lurker.onfirstframe()
+function lurker.exitinitstate()
+  lurker.state = "normal"
   if lurker.protected then
     lurker.initwrappers()
   end
 end
 
 
+function lurker.exiterrorstate()
+  lurker.state = "normal"
+  for _, v in pairs(lovecallbacknames) do
+    love[v] = lurker.funcwrappers[v]
+  end
+end
+
+
 function lurker.update() 
   if lurker.state == "init" then
-    lurker.onfirstframe()
-    lurker.state = "normal"
+    lurker.exitinitstate()
   end
   local diff = time() - lurker.last 
   if diff > lurker.interval then
@@ -166,14 +174,6 @@ function lurker.resetfile(f)
 end
 
 
-function lurker.exiterrorstate()
-  lurker.state = "normal"
-  for _, v in pairs(lovecallbacknames) do
-    love[v] = lurker.funcwrappers[v]
-  end
-end
-
-
 function lurker.hotswapfile(f)
   lurker.print("Hotswapping '{1}'...", {f})
   if lurker.state == "error" then 
@@ -196,6 +196,9 @@ end
 
 
 function lurker.scan()
+  if lurker.state == "init" then
+    lurker.exitinitstate()
+  end
   lume.each(lurker.getchanged(), lurker.hotswapfile)
 end
 
