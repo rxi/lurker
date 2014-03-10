@@ -9,7 +9,7 @@
 
 local lume = require "lume"
 
-local lurker = { _version = "1.0.0" }
+local lurker = { _version = "1.0.1" }
 
 
 local dir = love.filesystem.enumerate or love.filesystem.getDirectoryItems
