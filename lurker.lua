@@ -7,7 +7,7 @@
 -- under the terms of the MIT license. See LICENSE for details.
 --
 
-local lume = require "lume"
+local lume = lume or require "lume"
 
 local lurker = { _version = "1.0.1" }
 
