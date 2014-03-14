@@ -95,7 +95,8 @@ function lurker.onerror(e, nostacktrace)
   end
   love.update = lurker.update
 
-  local stacktrace = nostacktrace and "" or debug.traceback():gsub("\t", "")
+  local stacktrace = nostacktrace and "" or
+                     lume.trim((debug.traceback("", 2):gsub("\t", "")))
   local msg = lume.format("{1}\n\n{2}", {e, stacktrace})
   local colors = { 0xFF1E1E2C, 0xFFF0A3A3, 0xFF92B5B0, 0xFF66666A, 0xFFCDCDCD }
   love.graphics.reset()
