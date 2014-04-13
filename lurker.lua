@@ -94,6 +94,10 @@ function lurker.onerror(e, nostacktrace)
     love[v] = function() end
   end
   love.update = lurker.update
+  
+  -- Release mouse
+  local setgrab = love.mouse.setGrab or love.mouse.setGrabbed
+  setgrab(false)
 
   local stacktrace = nostacktrace and "" or
                      lume.trim((debug.traceback("", 2):gsub("\t", "")))
