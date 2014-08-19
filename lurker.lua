@@ -17,9 +17,17 @@ local isdir = love.filesystem.isDirectory
 local time = love.timer.getTime or os.time
 local lastmodified = love.filesystem.getLastModified
 
-local lovecallbacknames = { "update", "load", "draw", "mousepressed",
-                            "mousereleased", "keypressed", "keyreleased",
-                            "focus", "quit" }
+local lovecallbacknames = {
+  "update",
+  "load",
+  "draw",
+  "mousepressed",
+  "mousereleased",
+  "keypressed",
+  "keyreleased",
+  "focus",
+  "quit",
+}
 
 
 function lurker.init()
