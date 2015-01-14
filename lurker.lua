@@ -62,7 +62,7 @@ function lurker.listdir(path, recursive, skipdotfiles)
   for _, f in pairs(lume.map(dir(path), fullpath)) do
     if not skipdotfiles or not f:match("/%.[^/]*$") then
       if recursive and isdir(f) then
-        lume.merge(t, lurker.listdir(f, true, true))
+        t = lume.concat(t, lurker.listdir(f, true, true))
       else
         table.insert(t, lume.trim(f, "/"))
       end
