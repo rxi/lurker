@@ -128,18 +128,19 @@ function lurker.onerror(e, nostacktrace)
   love.draw = function()
     local pad = 25
     local width = love.graphics.getWidth()
+    local cc = select(3, love.window.getMode()).srgb and love.math.gammaToLinear or function(...) return ... end
     local function drawhr(pos, color1, color2)
       local animpos = lume.smooth(pad, width - pad - 8, lume.pingpong(time()))
-      if color1 then love.graphics.setColor(lume.rgba(color1)) end
+      if color1 then love.graphics.setColor(cc(lume.rgba(color1))) end
       love.graphics.rectangle("fill", pad, pos, width - pad*2, 1)
-      if color2 then love.graphics.setColor(lume.rgba(color2)) end
+      if color2 then love.graphics.setColor(cc(lume.rgba(color2))) end
       love.graphics.rectangle("fill", animpos, pos, 8, 1)
     end
     local function drawtext(str, x, y, color, limit)
-      love.graphics.setColor(lume.rgba(color))
+      love.graphics.setColor(cc(lume.rgba(color)))
       love.graphics[limit and "printf" or "print"](str, x, y, limit)
     end
-    love.graphics.setBackgroundColor(lume.rgba(colors[1]))
+    love.graphics.setBackgroundColor(cc(lume.rgba(colors[1])))
     love.graphics.clear()
     drawtext("An error has occurred", pad, pad, colors[2])
     drawtext("lurker", width - love.graphics.getFont():getWidth("lurker") - 
