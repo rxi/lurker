@@ -211,7 +211,7 @@ function lurker.hotswapfile(f)
     lurker.exiterrorstate()
   end
   if lurker.preswap(f) then
-    lurker.print("Hotswap of '{1}' aborted by preswap'", {f})
+    lurker.print("Hotswap of '{1}' aborted by preswap", {f})
     lurker.resetfile(f)
     return
   end
