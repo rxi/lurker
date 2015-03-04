@@ -210,7 +210,11 @@ function lurker.hotswapfile(f)
   if lurker.state == "error" then 
     lurker.exiterrorstate()
   end
-  lurker.preswap(f)
+  if lurker.preswap(f) then
+    lurker.print("Hotswap of '{1}' aborted by preswap'", {f})
+    lurker.resetfile(f)
+    return
+  end
   local modname = lurker.modname(f)
   local t, ok, err = lume.time(lume.hotswap, modname)
   if ok then
