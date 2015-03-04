@@ -33,7 +33,8 @@ scan detects any changes a hotswap is performed.
 
 ### lurker.preswap
 `lurker.preswap` can be set to a function. This function is called before a
-hotswap occurs and is passed the name of the file which will be swapped.
+hotswap occurs and is passed the name of the file which will be swapped. If the
+function returns `true` then the hotswap is canceled.
 ```lua
 lurker.preswap = function(f) print("File " .. f .. " swapping...") end
 ```
