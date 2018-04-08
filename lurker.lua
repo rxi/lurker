@@ -7,8 +7,9 @@
 -- under the terms of the MIT license. See LICENSE for details.
 --
 
--- Assumes lume is in the same directory as this file
-local lume = require((...):gsub("[^/.\\]+$", "lume"))
+-- Assumes lume is in the same directory as this file if it does not exist
+-- as a global
+local lume = rawget(_G, "lume") or require((...):gsub("[^/.\\]+$", "lume"))
 
 local lurker = { _version = "1.0.1" }
 
@@ -258,3 +259,4 @@ end
 
 
 return lurker.init()
+
