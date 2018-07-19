@@ -15,9 +15,9 @@ local lurker = { _version = "1.0.1" }
 
 
 local dir = love.filesystem.enumerate or love.filesystem.getDirectoryItems
-local isdir = love.filesystem.isDirectory
+local isdir = love.filesystem.getInfo
 local time = love.timer.getTime or os.time
-local lastmodified = love.filesystem.getLastModified
+local lastmodified = love.filesystem.getInfo
 
 local lovecallbacknames = {
   "update",
@@ -62,7 +62,7 @@ function lurker.listdir(path, recursive, skipdotfiles)
   local t = {}
   for _, f in pairs(lume.map(dir(path), fullpath)) do
     if not skipdotfiles or not f:match("/%.[^/]*$") then
-      if recursive and isdir(f) then
+      if recursive and isdir(f, "directory") then
         t = lume.concat(t, lurker.listdir(f, true, true))
       else
         table.insert(t, lume.trim(f, "/"))
@@ -201,7 +201,7 @@ end
 
 function lurker.getchanged()
   local function fn(f)
-    return f:match("%.lua$") and lurker.files[f] ~= lastmodified(f)
+    return f:match("%.lua$") and lurker.files[f] ~= lastmodified(f).modtime
   end
   return lume.filter(lurker.listdir(lurker.path, true, true), fn)
 end
@@ -213,7 +213,7 @@ end
 
 
 function lurker.resetfile(f)
-  lurker.files[f] = lastmodified(f)
+  lurker.files[f] = lastmodified(f).modtime
 end
 
 
