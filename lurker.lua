@@ -14,11 +14,11 @@ local lume = rawget(_G, "lume") or require((...):gsub("[^/.\\]+$", "lume"))
 local lurker = { _version = "1.0.1" }
 
 local compatibility = {
-  {
+  [1] = {
     isdir = love.filesystem.isDirectory,
     lastmodified = love.filesystem.getLastModified
   },
-  {
+  [2] = {
     isdir = function(s) return love.filesystem.getInfo(s).type == "directory" end,
     lastmodified = function(s) return love.filesystem.getInfo(s).modtime end
   }
