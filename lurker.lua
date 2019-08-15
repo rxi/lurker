@@ -13,11 +13,32 @@ local lume = rawget(_G, "lume") or require((...):gsub("[^/.\\]+$", "lume"))
 
 local lurker = { _version = "1.0.1" }
 
+local compatibility = {
+  {
+    isdir = love.filesystem.isDirectory,
+    lastmodified = love.filesystem.getLastModified
+  },
+  {
+    isdir = function(s) return love.filesystem.getInfo(s).type == "directory" end,
+    lastmodified = function(s) return love.filesystem.getInfo(s).modtime end
+  }
+}
 
+function lurker.checkLoveVersion()
+  local maj,min = love.getVersion()
+  local version = maj .. "." .. min
+  --print("LÖVE version: " .. version)
+  if tonumber(version) < 11.0 then
+    return 1
+  end
+  return 2
+end
+
+local loveversion = lurker.checkLoveVersion()
 local dir = love.filesystem.enumerate or love.filesystem.getDirectoryItems
-local isdir = love.filesystem.isDirectory
+local isdir = compatibility[loveversion].isdir
 local time = love.timer.getTime or os.time
-local lastmodified = love.filesystem.getLastModified
+local lastmodified = compatibility[loveversion].lastmodified
 
 local lovecallbacknames = {
   "update",
@@ -30,7 +51,6 @@ local lovecallbacknames = {
   "focus",
   "quit",
 }
-
 
 function lurker.init()
   lurker.print("Initing lurker")
