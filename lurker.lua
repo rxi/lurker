@@ -109,9 +109,21 @@ function lurker.onerror(e, nostacktrace)
   lurker.print("An error occurred; switching to error state")
   lurker.state = "error"
 
-  -- Release mouse
-  local setgrab = love.mouse.setGrab or love.mouse.setGrabbed
-  setgrab(false)
+  if love.mouse then
+    -- Release mouse
+    love.mouse.setVisible(true)
+
+    local setgrab = love.mouse.setGrab or love.mouse.setGrabbed
+    setgrab(false)
+
+    if love.mouse.setRelativeMode then
+      love.mouse.setRelativeMode(false)
+    end
+
+    if love.mouse.setCursor then
+      love.mouse.setCursor()
+    end
+  end
 
   -- Set up callbacks
   for _, v in pairs(lovecallbacknames) do
