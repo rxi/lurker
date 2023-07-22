@@ -120,16 +120,20 @@ function lurker.onerror(e, nostacktrace)
 
   love.update = lurker.update
 
+  local stacktrace = nostacktrace and "" or
+    lume.trim((debug.traceback("", 2):gsub("\t", "")))
+  local msg = lume.format("{1}\n\n{2}", {e, stacktrace})
+
   love.keypressed = function(k)
     if k == "escape" then
       lurker.print("Exiting...")
       love.event.quit()
     end
+    if k == "c" and love.keyboard.isDown("lctrl", "rctrl") then
+      love.system.setClipboardText(msg)
+    end
   end
 
-  local stacktrace = nostacktrace and "" or
-                     lume.trim((debug.traceback("", 2):gsub("\t", "")))
-  local msg = lume.format("{1}\n\n{2}", {e, stacktrace})
   local colors = {
     { lume.color("#1e1e2c", 256) },
     { lume.color("#f0a3a3", 256) },
@@ -168,11 +172,12 @@ function lurker.onerror(e, nostacktrace)
              "resume", pad, pad + 46, colors[3])
     drawhr(pad + 72, colors[4], colors[5])
     drawtext(msg, pad, pad + 90, colors[5], width - pad * 2)
+    drawtext("Press ESC to exit or CTRL+C to copy this message.",
+             pad, love.graphics.getHeight() - pad - 12, colors[3])
 
     love.graphics.reset()
   end
 end
-
 
 function lurker.exitinitstate()
   lurker.state = "normal"
